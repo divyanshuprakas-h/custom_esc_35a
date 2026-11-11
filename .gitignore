@@ -1,0 +1,7 @@
+*.bak
+*.kicad_prl
+*-save.kicad_pcb
+*-save.kicad_sch
+_autosave-*
+*.lck
+.DS_Store
