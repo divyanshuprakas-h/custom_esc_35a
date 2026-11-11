@@ -7,7 +7,7 @@ Qty,Component,Selected Part,Supplier,LCSC Part Number,Unit Price (USD),Order Cos
 1,"SMBJ28A TVS Diode Clamp 600W (SMB)",SMBJ28A,LCSC,C8536,0.12,0.12,D1
 3,"BAT54WS Fast Schottky Bootstrap Diode (SOD-323)",BAT54WS,LCSC,C8598,0.03,0.09,"D2, D3, D4"
 1,"Green SMD 0603 Status LED",LED 0603,LCSC,C84256,0.02,0.02,D5
-1,"0.5mΩ 2W 1% Current Sense Shunt Resistor (2512)",WSL2512R0005FEA,LCSC,C145524,0.35,0.35,R_SHUNT
+1,"0.5mΩ 2W 1% Current Sense Shunt Resistor (2512)",WSL2512R0005FEA,LCSC,C145524,0.35,0.35,RS1
 4,"10uF 50V Ceramic Capacitor (1206 X7R)",10uF 50V 1206,LCSC,C13585,0.08,0.32,"C1, C2, C3, C4"
 3,"1uF 50V Bootstrap Ceramic Capacitor (0603 X7R)",1uF 50V 0603,LCSC,C15849,0.02,0.06,"C5, C6, C7"
 4,"100nF 16V Decoupling Ceramic Capacitor (0402 X7R)",100nF 16V 0402,LCSC,C1525,0.005,0.02,"C8, C9, C10, C11"
