@@ -32,9 +32,7 @@ The repository is structured to mirror production-ready embedded hardware reposi
 custom_esc_35a/
 ├── README.md               # Hardware documentation, 3D renders, specs & BOM
 ├── JOURNAL.md              # 102.0-hour engineering devlog (52 sessions)
-├── journel.md              # Mirror journal for build log tools
 ├── bom.csv                 # Detailed component bill of materials (LCSC / JLCPCB)
-├── ERC.rpt                 # KiCad Electrical Rules Check verification report
 ├── grb.zip                 # Complete 1-click fabrication archive (Gerbers + Drill)
 ├── gerber-filess/          # Individual 4-layer RS-274X Gerbers and Excellon drill hits
 │   ├── custom_esc_35a-F_Cu.gtl         # Top Copper (Power & MOSFETs)
@@ -125,12 +123,12 @@ Verified with native KiCad 10 CLI (`kicad-cli pcb drc --severity-all`):
 
 ## Engineering Development Log
 
-A complete, humanized 102-hour engineering devlog documenting the entire design lifecycle across 52 sessions is maintained in [`JOURNAL.md`](JOURNAL.md):
-- **Sessions 1–10:** Research, datasheets, power architecture, TVS snubber, LDO budget, STM32 pinout, decoupling, gate driver, bootstrap, inverter bridge, shunt.
-- **Sessions 11–20:** INA180 amplifier, BEMF voltage dividers, virtual neutral star point, schematic capture, ERC passes 1–3, BOM sourcing, 3D CAD modeling.
-- **Sessions 21–30:** 4-layer stackup setup, design rules, 30x16mm board outline, pad placements, dual-sided layout strategy, power stage placement (4h), filter caps, logic placement.
-- **Sessions 31–40:** SWD test pads, initial DRC collisions, INA180 overlap fix, TVS/shunt separation, 0.3mm edge clearance, silkscreen labeling, pre-routing 3D raytracing, DSN export.
-- **Sessions 41–52:** Layer definitions, QFN escape bottlenecks, C8/C9 decoupling relocation, central channel widening, FreeRouting profiling (4h), stagnation diagnosis, bytecode patching, 100% convergence (Score 1000.00), necked pad rules, post-routing KiCad DRC 0, final raytracing.
+The project development log is documented across 52 engineering sessions in [`JOURNAL.md`](JOURNAL.md):
+- **Sessions 1–10:** Research and part selection, block diagram, input protection, LDO regulator, MCU pinout, decoupling, gate driver, bootstrap circuit, MOSFET bridge, current shunt.
+- **Sessions 11–20:** Current sense amp, BEMF dividers, virtual star point, schematic checks, footprint cleanup, fixing ERC errors, BOM sourcing, 3D models.
+- **Sessions 21–30:** Stackup setup, design rules, board outline, solder pads, component placement planning, placing MOSFETs, caps, shunt, MCU, driver, and LDO.
+- **Sessions 31–40:** SWD pads, first DRC check, fixing overlaps, TVS spacing, edge clearances, silkscreen cleanup, polarity labels, 3D inspection, DSN export.
+- **Sessions 41–52:** Ground plane, power routing, finding MCU escape bottlenecks, moving caps for escape room, channel widening, autorouting passes, completing 100% routing, fixing necked traces, final DRC, and Gerber export.
 
 ---
 
