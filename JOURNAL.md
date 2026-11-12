@@ -198,22 +198,43 @@ The power inverter bridge is the heart of the ESC. It must deliver 35A continuou
 
 ---
 
-# 2026-11-11: Research & BLDC Architecture Selection
+# 2026-11-11: Get Started and Research
 
 **Total time spent: 3.5 hours**
 
-I started research and architectural planning for a custom, ultra-compact brushless Electronic Speed Controller (ESC) tailored for 5-inch freestyle and racing quadcopter drone arms. Modern drone builds demand a slim form factor (under 16mm width) capable of running 3S to 6S LiPo batteries while supporting modern high-speed digital protocols like bidirectional DShot600.
+I have begun researching and designing an ultra small custom brushless Electronic Speed Controller (ESC). This is aimed at being used on 5-inch freestyle/racing drone arms. The ESC must be very thin (Under 16mm), and support 3S-6S LiPo’s at high speeds over modern protocols such as bidirectional DShot600.
 
-Key architectural decisions:
-- **Form Factor:** 30.0mm × 16.0mm rectangular footprint with 4-layer FR-4 stackup and heavy 2oz copper planes to manage the thermal density of 35A continuous / 45A burst power without needing bulky aluminum heatsinks.
-- **Microcontroller Selection:** Selected the **STM32G071KBT6** (ARM Cortex-M0+ running at 64MHz, 128KB Flash, 36KB SRAM in a compact QFN-32 5x5mm package).
-  - Why STM32G071 over older 8-bit BB21/EFM8: Offers advanced motor control timer `TIM1` with hardware complementary PWM outputs, programmable dead-time generator, internal analog comparators for sensorless BEMF zero-crossing detection, and full DMA support for DShot150/300/600 and bidirectional RPM telemetry.
-- **Commutation Strategy:** Sensorless 6-step trapezoidal commutation using BEMF zero-crossing detection with hardware comparator filtering.
-- **Protocol Support:** Standard PWM, OneShot125, DShot300, and DShot600 with telemetry.
+Design considerations:
 
-Datasheets and reference materials consulted:
-- STM32G071KB Reference Manual & Datasheet (STMicroelectronics)
-- FD6288Q 3-Phase Half-Bridge Driver Datasheet (Fortior Technology)
-- INA180 High-Speed Current Sense Amplifier Datasheet (Texas Instruments)
-- SGM2203 36V Low-Noise LDO Datasheet (SG Micro)
-- BLHeli_32 / AM32 Open-Source ESC Architecture Guides
+Form Factor
+
+The ESC will have a 30.0mm x 16.0mm overall size, with a 4 layer FR-4 board and 2oz copper layers to cope with the high currents (35A Continuous / 45A Burst).
+
+Controller
+
+The STM32G071KBT6 was chosen, which is an ARM Cortex-M0+, operating at 64MHz, with 128KB Flash and 36KB SRAM inside. It has a tiny QFN-32 5x5mm footprint.
+
+The STM32G071 was chosen over the older 8-bit controllers (BB21/EFM8), as it has a powerful motor control timer (TIM1), with hardware complementary PWM outputs, configurable dead time generator, internal comparators for sensorless BEMF zero crossing detection, and the ability to use DMA. This can be used for DShot150/300/600 and bidirectional RPM telemetry.
+
+Commutation
+
+Sensorless 6-step trapezoidal commutation using BEMF zero crossing detection with hardware comparators.
+
+Supported Protocols
+
+PWM, OneShot125, DShot300, DShot600 (With telemetry).
+
+Documentation Used:
+
+
+
+STM32G071KB Reference Manual / Datasheet (STMicroelectronics)
+
+FD6288Q 3-Phase Half Bridge Driver Datasheet (Fortior Technology)
+
+INA180 High Speed Current Sense Amplifier Datasheet (Texas Instruments)
+
+SGM2203 36V Low Noise LDO Datasheet (SG Micro)
+
+BLHeli_32 / AM32 Open Source ESC Design Guides
+
