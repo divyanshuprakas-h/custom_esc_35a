@@ -1,7 +1,4 @@
 # Engineering Development Log: Custom 35A 3S-6S BLDC Electronic Speed Controller (ESC)
-This engineering development journal documents the end-to-end design, schematic capture, component selection, electrical rules verification (ERC), 4-layer PCB stackup configuration, dual-sided placement, topological autorouting, and design rules check (DRC) verification of a high-performance 35A continuous (45A burst) BLDC Electronic Speed Controller (ESC) in a 30x16mm form factor.
-All entries follow a chronological engineering log format detailing design decisions, mathematical trade-offs, and verification results across **102.0 total engineering development hours**.
-
 ---
 
 ## 2026-11-08: Research, Datasheet Exploration & Component Selection
@@ -690,61 +687,3 @@ all production design files, schematics, netlists, and 3d renders have been comm
 ![Master Production-Grade 3D Isometric View of Completed ESC](image/pcb_iso_3d.png)
 
 ---
-
-## Engineering Time Summary
-
-| Session | Date | Engineering Focus & Activity | Hours Logged |
-| :---: | :--- | :--- | :---: |
-| 1 | 2026-11-08 | Research, Datasheet Exploration & Component Selection | 3.0 |
-| 2 | 2026-11-08 | System Architecture & DC Power Path Topology | 2.0 |
-| 3 | 2026-11-08 | Power Stage TVS Suppression & Transient Snubbing | 2.0 |
-| 4 | 2026-11-09 | SGM2203 LDO Power Budget & Thermal Dissipation | 2.0 |
-| 5 | 2026-11-09 | STM32G071 Pinout Allocation & SWD Configuration | 2.0 |
-| 6 | 2026-11-09 | Decoupling Capacitor Placement & Noise Filtering | 2.0 |
-| 7 | 2026-11-09 | FD6288Q Gate Driver Architecture & Bootstrap Analysis | 2.0 |
-| 8 | 2026-11-09 | Bootstrap Diode & Resistor Calculation | 2.0 |
-| 9 | 2026-11-09 | 3-Phase Inverter Half-Bridge MOSFET Network | 2.0 |
-| 10 | 2026-11-09 | 2512 Shunt Resistor & Low-Side Return Path | 2.0 |
-| 11 | 2026-11-10 | INA180 Current Sense Amplifier & Filter Tuning | 2.0 |
-| 12 | 2026-11-10 | Back-EMF Divider Resistor Network Design | 2.0 |
-| 13 | 2026-11-10 | Virtual Neutral Star Network vs True Neutral Tap | 2.0 |
-| 14 | 2026-11-10 | Complete Schematic Integration & Inter-Sheet Auditing | 2.0 |
-| 15 | 2026-11-10 | Schematic Symbol Standardization & Reference Cleanliness | 1.0 |
-| 16 | 2026-11-10 | Electrical Rules Check (ERC) - Phase 1: Floating Nets | 2.0 |
-| 17 | 2026-11-10 | Electrical Rules Check (ERC) - Phase 2: Resolving Phase Line Taps | 2.0 |
-| 18 | 2026-11-10 | Electrical Rules Check (ERC) - Phase 3: Power Flags & Junctions | 1.0 |
-| 19 | 2026-11-11 | BOM Generation, Sourcing Availability & Footprint Mapping | 2.0 |
-| 20 | 2026-11-11 | 3D CAD Model Association & Mechanical Sizing | 2.0 |
-| 21 | 2026-11-11 | KiCad PCB Setup, 4-Layer Stackup & Copper Thickness | 2.0 |
-| 22 | 2026-11-11 | Netclass Definition, Clearance Matrix & Drill Constraints | 2.0 |
-| 23 | 2026-11-11 | Board Outline, 30x16mm Boundary & Rounded Edge Cuts | 2.0 |
-| 24 | 2026-11-11 | Solder Wire Pad Placement for Battery & Phase Terminals | 3.0 |
-| 25 | 2026-11-11 | Dual-Sided Placement Strategy: Thermal vs Signal Separation | 2.0 |
-| 26 | 2026-11-11 | Power Stage Placement: Q1-Q6 MOSFET Bridge Symmetry | 4.0 |
-| 27 | 2026-11-11 | DC-Link Ceramic Capacitors C1-C4 & Shunt Resistor Placement | 2.0 |
-| 28 | 2026-11-11 | Bottom Layer Logic Placement: STM32G071 MCU Positioning | 2.0 |
-| 29 | 2026-11-11 | Bottom Layer Driver Placement: FD6288Q Positioning | 2.0 |
-| 30 | 2026-11-11 | Power Supply & Analog Conditioning Placement: LDO & INA180 | 2.0 |
-| 31 | 2026-11-12 | SWD Debug Header & Reset Test Pad Arrangement | 1.0 |
-| 32 | 2026-11-12 | Initial Unrouted DRC Check: Detecting Component Overlaps | 2.0 |
-| 33 | 2026-11-12 | DRC Correction: INA180 Pad Overlap & C14 Separation | 2.0 |
-| 34 | 2026-11-12 | DRC Correction: TVS Diode D1 and Current Shunt Clearance | 2.0 |
-| 35 | 2026-11-12 | DRC Correction: Copper Edge Clearances Along 30x16mm Boundary | 1.0 |
-| 36 | 2026-11-12 | DRC Clearance Verification: Pad-to-Pad & Mask Bridges | 1.0 |
-| 37 | 2026-11-12 | Component Legend & Reference Cleanliness on Silkscreen | 2.0 |
-| 38 | 2026-11-12 | Polarity Markings & Board Identification Silkscreen | 1.0 |
-| 39 | 2026-11-12 | Pre-Routing 3D Raytracing Inspection & Thermal Review | 2.0 |
-| 40 | 2026-11-12 | Specctra DSN Export & Netclass Priority Rule Mapping | 2.0 |
-| 41 | 2026-11-12 | Initial Routing Strategy: Inner Ground Plane In1.Cu Pour | 2.0 |
-| 42 | 2026-11-12 | Power Plane In2.Cu Layer Definition & VBAT Distribution | 2.0 |
-| 43 | 2026-11-12 | Identifying Escape Bottlenecks on STM32G071 QFN Package | 2.0 |
-| 44 | 2026-11-12 | Relocating Decoupling Capacitors C8/C9 for Escape Channels | 2.0 |
-| 45 | 2026-11-12 | Widening Central Channel Between MCU and FD6288Q Driver | 2.0 |
-| 46 | 2026-11-12 | FreeRouting Autorouting Engine Iterations & Profiling | 4.0 |
-| 47 | 2026-11-12 | Diagnosing Autorouter Premature Stagnation at 149 Connections | 2.0 |
-| 48 | 2026-11-12 | Bytecode Patching FreeRouting to Disable Stagnation Timeout | 2.0 |
-| 49 | 2026-11-12 | Achieving 100% Autorouting Convergence: 152/152 Routed | 2.0 |
-| 50 | 2026-11-12 | Importing SES Back to KiCad & Resolving Track Width Rules | 2.0 |
-| 51 | 2026-11-12 | Post-Routing KiCad DRC Verification: 0 Violations | 1.0 |
-| 52 | 2026-11-12 | Final 4-Layer 3D Raytracing & Production Gerber Export | 1.0 |
-| **Total** | | **Full Engineering Development Time (52 Sessions)** | **102.0** |
