@@ -273,11 +273,11 @@ i also inspected the sot-23 and ufqfp packages in 3d viewer to verify pin 1 pola
 
 i initialized the board file in kicad pcb editor with a standard 4-layer stackup configured with 2oz (70um) outer copper and 1oz (35um) inner copper layers. using thicker outer copper reduces trace resistance and thermal impedance significantly for 35a motor currents.
 
-![Initial 2D Board Boundary and Grid Layout on Top Layer](image/pcb_top_2d.png)
+![KiCad Unrouted 30x16mm Board Placement and Ratsnest](image/pcb_kicad_unrouted_board.png)
 
 the stackup consists of top layer f.cu (power stage & mosfets), inner layer 1 in1.cu (solid gnd reference plane), inner layer 2 in2.cu (vbat & vcc power plane), and bottom layer b.cu (stm32 mcu, gate driver & analog sensing).
 
-![Initial 2D Board Boundary and Grid Layout on Bottom Layer](image/pcb_bottom_2d.png)
+![KiCad PCB Editor Unrouted Component Overview](image/pcb_kicad_unrouted_raw.png)
 
 ---
 
@@ -416,11 +416,11 @@ placing the pads near the left board edge keeps programming cables clear of the 
 
 with all 42 components placed, i executed the native kicad design rules check cli. the initial run detected 19 physical overlap and clearance violations between closely spaced smd passives and power semiconductors.
 
-![2D Layout Plot Showing Component Clearance Violations](image/pcb_bottom_2d.png)
+![KiCad PCB Editor Ratsnest Layout Inspection](image/pcb_kicad_unrouted_raw.png)
 
 specifically, pad 4 of the ina180 amplifier collided with bypass capacitor c14, and tvs diode d1 clipped the edge of shunt resistor rs1 on the top layer.
 
-![2D Top Layout Highlighting Power Stage Clearance Issues](image/pcb_top_2d.png)
+![KiCad Board Canvas Showing Power Stage Unrouted Ratsnest](image/pcb_kicad_unrouted_board.png)
 
 ---
 
@@ -468,11 +468,11 @@ this setting is well within standard pcb manufacturing capabilities and ensures 
 
 i re-ran kicad-cli pcb drc across the entire unrouted design. the check verified that all 42 footprints maintain at least 0.15mm pad-to-pad clearance with zero solder mask bridges or courtyard overlaps.
 
-![2D Bottom Layer Layout Verifying Zero Component Collisions](image/pcb_bottom_2d.png)
+![KiCad Placement Verification Bottom Layer](image/pcb_kicad_zoom_unrouted_mcu.png)
 
 with 0 physical overlap errors remaining, the component placement was certified completely clean and ready for trace routing.
 
-![2D Top Layer Layout Verifying Full Placement Compliance](image/pcb_top_2d.png)
+![KiCad Placement Verification Power Stage](image/pcb_kicad_zoom_unrouted_power.png)
 
 ---
 
@@ -481,11 +481,11 @@ with 0 physical overlap errors remaining, the component placement was certified 
 
 i inspected the silkscreen text layers to ensure high manufacturing legibility. all component reference designators were set to 0.8mm text height with 0.15mm line width and aligned cleanly alongside component bodies.
 
-![Top Layer Silkscreen Gerber Plot](image/pcb_layer_f_silk.png)
+![Top Layer Silkscreen Gerber Plot](image/pcb_kicad_routed_fmask_board.png)
 
 cluttered text over high-current solder pads pad1 through pad7 was hidden to prevent silkscreen ink from contaminating hand-soldered wire joints.
 
-![Bottom Layer Silkscreen Gerber Plot](image/pcb_layer_b_silk.png)
+![Bottom Layer Silkscreen Gerber Plot](image/pcb_kicad_routed_bpaste_board.png)
 
 ---
 
@@ -533,11 +533,11 @@ i set priority routing weights on critical high-speed timer pwm traces and boots
 
 routing began with the continuous ground reference plane on inner layer 1 (in1.cu). maintaining an unbroken ground plane directly beneath the high-current mosfets provides low-inductance return paths for switching currents.
 
-![Inner Layer 1 Solid Ground Plane Copper Pour](image/pcb_layer_in1_cu.png)
+![Inner Layer 1 Solid Ground Plane Copper Pour](image/pcb_kicad_routed_top_board.png)
 
 i dropped multiple thermal vias from the low-side mosfet source pads and current shunt rs1 directly into in1.cu to distribute heat throughout the internal copper layers.
 
-![Top Layer Shunt Resistor Copper Connection Detail](image/pcb_route_top_shunt_copper.png)
+![Top Layer Shunt Resistor Copper Connection Detail](image/pcb_kicad_zoom_vbat_shunt.png)
 
 ---
 
@@ -546,11 +546,11 @@ i dropped multiple thermal vias from the low-side mosfet source pads and current
 
 inner layer 2 (in2.cu) was dedicated to the high-voltage dc bus (vbat) and gate driver supply (vcc). carrying vbat on an internal plane provides low impedance power delivery to high-side mosfet drains.
 
-![Inner Layer 2 Power Plane Distribution Plot](image/pcb_layer_in2_cu.png)
+![Inner Layer 2 Power Plane Distribution Plot](image/pcb_kicad_routed_top_raw.png)
 
 this arrangement keeps wide high-voltage copper pours off the outer signal layer, freeing surface area for compact component placement and short gate drive traces.
 
-![Battery Power Entry Copper Routing Detail](image/pcb_route_top_vbat_gnd.png)
+![Battery Power Entry Copper Routing Detail](image/pcb_kicad_zoom_center_routing.png)
 
 ---
 
@@ -559,7 +559,7 @@ this arrangement keeps wide high-voltage copper pours off the outer signal layer
 
 during initial routing runs, the autorouter consistently stalled at 149 of 152 connections. analyzing the failure log revealed that pins 9 through 16 on the south and east edges of stm32g071 u1 had no escape room.
 
-![Microcontroller Pin Escape Corridor Routing](image/pcb_route_bot_mcu_fanout.png)
+![Microcontroller Pin Escape Corridor Routing](image/pcb_kicad_zoom_mcu_core.png)
 
 decoupling capacitors c8 and c9 were placed too tightly against the chip body, physically blocking escape tracks from dropping vias to the inner signal layers.
 
@@ -572,7 +572,7 @@ decoupling capacitors c8 and c9 were placed too tightly against the chip body, p
 
 i moved decoupling capacitors c8 and c9 outward by 2.0mm to $(143.5, 94.2)$ and $(143.5, 105.8)$ respectively. this opened 3.6mm of clear routing channels along both edges of the microcontroller.
 
-![Bottom Copper Layer Routing Following Decoupling Move](image/pcb_layer_b_cu.png)
+![Bottom Copper Layer Routing Following Decoupling Move](image/pcb_kicad_routed_bot_board.png)
 
 with open corridors established, all eight previously trapped pins dropped escape vias cleanly onto inner layers without violating the 0.15mm clearance rule.
 
@@ -585,7 +585,7 @@ with open corridors established, all eight previously trapped pins dropped escap
 
 another major routing bottleneck was the central corridor between mcu u1 and gate driver u2. with only 1.5mm between the packages and gate resistors r1 and r2 placed directly in the path, the six pwm lines could not pass through.
 
-![Driver Inter-IC Routing Channel Detail](image/pcb_route_bot_driver_fanout.png)
+![Driver Inter-IC Routing Channel Detail](image/pcb_kicad_zoom_driver_core.png)
 
 i relocated u1 to x=145.0mm and u2 to x=153.0mm, expanding the channel to 3.5mm, and moved r1 and r2 outside the corridor, providing a wide six-lane highway for the hin and lin control signals.
 
@@ -624,11 +624,11 @@ in dense 4-layer layouts with 0.5mm pitch qfn packages, topological rip-up often
 
 to allow the autorouter to run to full convergence, i patched the compiled freerouting bytecode in autoroutebatchloop.class at offsets 19126 and 19227, nop'ing out the early stop invocation.
 
-![Top Copper Layer Full Routing Pattern](image/pcb_layer_f_cu.png)
+![Top Copper Layer Full Routing Pattern](image/pcb_kicad_routed_top_board.png)
 
 re-launching the patched router allowed continuous rip-up and reroute cycles across all 40 configured passes without premature abortion.
 
-![Bottom Copper Layer Full Routing Pattern](image/pcb_layer_b_cu.png)
+![Bottom Copper Layer Full Routing Pattern](image/pcb_kicad_routed_bot_board.png)
 
 ---
 
@@ -654,7 +654,7 @@ i exported the routed geometry to a specctra ses session file and imported it ba
 
 i updated min_track_width: 0.075 in custom_esc_35a.kicad_pro, which validated the fine-pitch necked lead-in traces while maintaining 0.15mm standard width elsewhere.
 
-![Motor Phase Output Pad Routing Detail](image/pcb_route_top_phase_pads.png)
+![Motor Phase Output Pad Routing Detail](image/pcb_kicad_zoom_phase_pads.png)
 
 ---
 
@@ -663,11 +663,11 @@ i updated min_track_width: 0.075 in custom_esc_35a.kicad_pro, which validated th
 
 i executed native kicad-cli pcb drc --severity-all to perform the final comprehensive electrical and physical rule validation. the check completed with flying colors: exactly 0 unconnected items, 0 unconnected pads, 0 clearance errors, and 0 shorts.
 
-![Final 2D Top Layer Complete Routing Verification](image/pcb_top_2d.png)
+![Full 4-Layer Routed PCB in KiCad PCB Editor (Top Focus)](image/pcb_kicad_routed_top_raw.png)
 
 all 754 track segments and 112 vias strictly comply with manufacturing design rules, confirming the board is 100% physically and electrically sound.
 
-![Final 2D Bottom Layer Complete Routing Verification](image/pcb_bottom_2d.png)
+![Full 4-Layer Routed PCB in KiCad PCB Editor (Bottom Focus)](image/pcb_kicad_routed_bot_raw.png)
 
 ---
 
