@@ -7,30 +7,31 @@ All entries follow a chronological engineering log format detailing design decis
 ## 2026-11-08: Research, Datasheet Exploration & Component Selection
 **Total time spent: 3.0 hours**
 
-i began the project by setting up the specifications for a compact 35a continuous 45a burst single bldc motor electronic speed controller capable of running on 3s to 6s lipo batteries. evaluating current flight controller stacks showed that space is at a premium, so my goal was to keep the board footprint strictly within 30x16mm while utilizing a modern stm32 32-bit mcu rather than legacy 8-bit chips. i collected all primary component datasheets to benchmark maximum ratings, rds(on), propagation delays, and pinout constraints:
+to start with i wanted to set out what was required for a small 35A continuous, 45A burst 1BLDC motor ESC that can run off 3S-6S lipo batteries. Looking at existing flight controller stack setups it became apparent that space is very limited. So the plan was to design an ESC that fits into a 30x16mm footprint using a modern STM32 32bit MCU. I gathered all the data sheets for main components to get a rough idea of their peak values, Rds(on), Propagation delays and pinout restrictions:
 - [STM32G071KB Microcontroller Datasheet (STMicroelectronics)](https://www.st.com/resource/en/datasheet/stm32g071kb.pdf)
 - [FD6288Q 3-Phase Gate Driver Datasheet (Fortior Tech)](https://datasheet.lcsc.com/lcsc/2108131530_Fortior-Tech-FD6288Q_C2843477.pdf)
 - [INA180A1 Current Sense Amplifier Datasheet (Texas Instruments)](https://www.ti.com/lit/ds/symlink/ina180.pdf)
 - [SGM2203-3.3 Ultra-Low Noise LDO Datasheet (SG Micro)](https://www.sg-micro.com/uploads/soft/20190628/1561689947.pdf)
 - [TPHR7404PXP N-Channel 40V 100A MOSFET Datasheet (Toshiba)](https://toshiba.semicon-storage.com/info/TPHR7404PXP_datasheet_en_20210323.pdf)
 - [SMBJ24A Transient Voltage Suppressor (Bourns)](https://www.bourns.com/docs/product-datasheets/smbj.pdf)
+- 
+<img width="810" height="924" alt="image" src="https://github.com/user-attachments/assets/d403d5b0-fcaf-4641-ac67-e35aceb3e4fd" />
 
-![Comprehensive Master ESC Schematic Architecture](image/schematic_with_boxes.png)
 
-diving deep into the toshiba tphr7404pxp mosfet datasheet confirmed a low rds(on) of only 1.5 milliohms in a compact 3.3x3.3mm dfn package, making it suitable for high power density. the fd6288q gate driver features dedicated high and low side drivers with integrated bootstrap diodes and 200ns dead-time management, avoiding cross-conduction in the inverter bridge.
+looking at the Toshiba TPHR7404PXP MOSFET datasheet reveals the device has a very low Rds(on) of 1.5mOhms and fits well in a small 3.3x3.3mm DFN package. The FD6288Q gate driver contains high and low drivers with built-in bootstrap diodes and 200ns dead time control to avoid any cross conduction in the inverter bridge.
 
-![Schematic Architecture Overview Without Section Bounding Boxes](image/schematic_without_boxes.png)
+<img width="458" height="597" alt="Screenshot 2026-11-12 at 5 47 46 PM" src="https://github.com/user-attachments/assets/862d1d5c-42c0-4a72-a42e-c2728354d105" />
 
 ---
 
 ## 2026-11-08: System Architecture & DC Power Path Topology
 **Total time spent: 2.0 hours**
 
-sketching the system architecture on paper helped divide the board into four functional sections: power input filtering, microcontroller core, 3-phase gate drive, and the inverter bridge. separating the high-current power switching paths from sensitive analog sensing is essential to prevent motor inductive kicks from resetting the microcontroller.
+block diagram was sketched to split the design into four sections. Power input filtering, microcontroller, 3-phase gate drive and inverter bridge. It is important to isolate the high current power switching circuitry from any sensitive analog circuits to prevent resets from occurring in the microcontroller due to motor inductive spikes.
 
 ![Detailed Power Entry and Input Filter Schematic](image/sch_power_entry.png)
 
-i laid down the fundamental power flow diagram starting from the vbat pads through a reverse polarity and transient protection stage before splitting into high-current bus bars for the half-bridges and a quiet regulated 3.3v rail for logic.
+i started off with the basic power flow diagram. Starting with the vbat pads, reverse polarity and transient protection then splitting into high current bus bars to go to the half bridges and a clean and regulated 3.3v rail for the logic.
 
 ![Unboxed Power Supply and Input Transient Circuitry](image/sch_power_noboxes.png)
 
@@ -39,11 +40,11 @@ i laid down the fundamental power flow diagram starting from the vbat pads throu
 ## 2026-11-08: Power Stage TVS Suppression & Transient Snubbing
 **Total time spent: 2.0 hours**
 
-switching 35a inductive motor currents generates aggressive voltage spikes during rapid pwm commutation transitions that can easily exceed the 25.2v 6s lipo ceiling. to protect the power semiconductors, i designed a dedicated clamping stage using an smbj24a unidirectional transient voltage suppressor capable of absorbing 600w peak pulse power.
+switching 35A inductive motor currents creates some quite aggressive voltage spikes during fast PWM commutation that can easily exceed the maximum voltage of the 6S 25.2v Lipo battery. I have therefore designed a clamping circuit to protect the power semiconductors. The circuit uses a bidirectional suppression diode (SMBJ24A) which can absorb 600W peak pulse power.
 
 ![TVS Diode D1 Clamping Network Closeup](image/sch_tvs_clamp_detail.png)
 
-alongside the tvs diode, i placed an array of low-esr ceramic capacitors directly across the dc bus to snub high frequency ringing. using four 10uf 35v 1206 capacitors in parallel provides 40uf of local bulk reservoir while spreading current ripple across multiple packages.
+along with the tvs diode i put a string of low esr ceramic caps across the DC Bus to dampen any high frequency oscillations. Four 10uF 35V 1206 caps in parallel give us 40uF of bulk storage locally. The current will be shared between the 4 caps too.
 
 ![DC-Link Ceramic Capacitor Filtering Bank Detail](image/sch_bulk_caps_detail.png)
 
@@ -52,7 +53,7 @@ alongside the tvs diode, i placed an array of low-esr ceramic capacitors directl
 ## 2026-11-09: SGM2203 LDO Power Budget & Thermal Dissipation
 **Total time spent: 2.0 hours**
 
-powering the stm32g071 mcu and low-voltage analog sensors directly from a 6s lipo requires stepping down up to 25.2v to 3.3v cleanly. switching buck regulators generate high frequency magnetic noise that disturbs adc current measurements, so i chose the sgm2203-3.3 high voltage linear regulator in a sot-23-5 package.
+To power the STM32G071 MCU and low voltage analog sensors from a 6s lipo battery it will be necessary to step down voltages of up to 25.2V to 3.3V. Switching buck regulators produce high frequency magnetic interference which can cause issues when taking ADC current readings. The SGM2203-3.3 High Voltage Linear Regulator (SOT-23-5) was chosen.
 
 ![SGM2203 Linear Regulator Schematic Section](image/sch_ldo_sgm2203.png)
 
