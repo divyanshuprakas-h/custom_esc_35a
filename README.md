@@ -22,6 +22,45 @@ The board is **100% routed and DRC-verified** in KiCad 10 with **0 electrical vi
 
 ---
 
+---
+
+## Repository Structure
+
+The repository is structured to mirror production-ready embedded hardware repositories:
+
+```text
+custom_esc_35a/
+├── README.md               # Hardware documentation, 3D renders, specs & BOM
+├── JOURNAL.md              # 102.0-hour engineering devlog (52 sessions)
+├── journel.md              # Mirror journal for build log tools
+├── bom.csv                 # Detailed component bill of materials (LCSC / JLCPCB)
+├── ERC.rpt                 # KiCad Electrical Rules Check verification report
+├── grb.zip                 # Complete 1-click fabrication archive (Gerbers + Drill)
+├── gerber-filess/          # Individual 4-layer RS-274X Gerbers and Excellon drill hits
+│   ├── custom_esc_35a-F_Cu.gtl         # Top Copper (Power & MOSFETs)
+│   ├── custom_esc_35a-In1_Cu.g1        # Inner Layer 1 (Solid GND Plane)
+│   ├── custom_esc_35a-In2_Cu.g2        # Inner Layer 2 (VBAT / VCC Power Plane)
+│   ├── custom_esc_35a-B_Cu.gbl         # Bottom Copper (MCU & Driver Logic)
+│   ├── custom_esc_35a-F_Mask.gts       # Top Solder Mask
+│   ├── custom_esc_35a-B_Mask.gbs       # Bottom Solder Mask
+│   ├── custom_esc_35a-F_Silkscreen.gto # Top Silkscreen Legend
+│   ├── custom_esc_35a-B_Silkscreen.gbo # Bottom Silkscreen Legend
+│   ├── custom_esc_35a-F_Paste.gtp      # Top Solder Paste (Stencil)
+│   ├── custom_esc_35a-B_Paste.gbp      # Bottom Solder Paste (Stencil)
+│   ├── custom_esc_35a-Edge_Cuts.gm1    # 30x16mm Board Boundary with 1mm fillets
+│   └── custom_esc_35a.drl              # Excellon drill hits (PTH & NPTH)
+├── kicad/                  # KiCad 10 project source files
+│   ├── custom_esc_35a.kicad_pcb        # 100% routed 4-layer board
+│   ├── custom_esc_35a.kicad_sch        # Hierarchical schematic
+│   ├── custom_esc_35a.kicad_pro        # KiCad project settings & design rules
+│   ├── custom_esc_35a.kicad_dru        # DRC custom rules (0.15mm default)
+│   └── custom_esc_35a.kicad_sym        # Embedded symbol library
+├── firmware/               # ESC firmware definitions & target configuration
+│   ├── README.md                       # STM32G071 pinout & peripheral register guide
+│   └── target.h                        # AM32 / BLHeli_32 compile-time target header
+└── image/                  # 3D raytraced renders, layer plots & schematic crops
+```
+
 ## Technical Specifications
 
 | Parameter | Specification | Notes |
